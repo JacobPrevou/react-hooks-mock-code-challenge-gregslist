@@ -1,21 +1,30 @@
 import React from "react";
 
-function ListingCard() {
+function ListingCard({ listing, onRemoveListing, onFavorite, isFavorite }) {
+
+  function handleDeleteListing() {
+    fetch(`http://localhost:6001/listings/${listing.id}`, {
+    method: "DELETE",
+  })
+    .then((r) => r.json())
+    .then(() => onRemoveListing(listing));
+  }
+
   return (
     <li className="card">
       <div className="image">
         <span className="price">$0</span>
-        <img src={"https://via.placeholder.com/300x300"} alt={"description"} />
+        <img src={listing.image} alt={"description"} />
       </div>
       <div className="details">
-        {true ? (
-          <button className="emoji-button favorite active">★</button>
+        {isFavorite ? (
+          <button className="emoji-button favorite active" onClick={onFavorite}>★</button>
         ) : (
-          <button className="emoji-button favorite">☆</button>
+          <button className="emoji-button favorite" onClick={onFavorite}>☆</button>
         )}
-        <strong>{"description"}</strong>
-        <span> · {"location"}</span>
-        <button className="emoji-button delete">🗑</button>
+        <strong>{listing.description}</strong>
+        <span> · {listing.location}</span>
+        <button className="emoji-button delete" onClick={handleDeleteListing}>🗑</button>
       </div>
     </li>
   );
